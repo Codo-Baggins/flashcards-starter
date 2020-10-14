@@ -7,19 +7,20 @@ class Round {
     this.incorrectGuesses = [];
   }
   
-  returnCurrentCard(turn) {
-    return this.deck[0];
+  returnCurrentCard() {
+    return this.deck.cards[0];
   }
 
   takeTurn(guess) {
-    var turn = new Turn(guess, this.returnCurrentCard);
+    var turn = new Turn(guess, this.returnCurrentCard());
     this.turns += 1;
-    turn.evaluateGuess();
-    turn.giveFeedback();
-    this.incorrectGuesses.push(guess);
-    if (turn.evaluateGuess()) {
-      this.deck.shift()
-    }
+
+    if (turn.evaluateGuess() === false) {
+      this.incorrectGuesses.push(this.returnCurrentCard().id);
+    } 
+
+    this.deck.cards.shift();
+    return turn.giveFeedback();
   }
 
   calculatePercentCorrect() {
@@ -27,7 +28,7 @@ class Round {
   }
 
   endRound() {
-    console.log(`** Round over! ** You answered ${this.calculatePercentCorrect()}% of the questions correctly!`);
+    return console.log(`** Round over! ** You answered ${this.calculatePercentCorrect()}% of the questions correctly!`);
   }
 }
 
